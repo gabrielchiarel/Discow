@@ -1,4 +1,9 @@
 <?php
+    if (empty($_REQUEST['login']) || empty($_REQUEST['password']))
+    {
+        header("Location: login.html");
+    }
+
     $con = new PDO('mysql:host=localhost;dbname=discow', 'root', '');
 
     $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);

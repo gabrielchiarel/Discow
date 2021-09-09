@@ -72,6 +72,24 @@
                 <main id="inicio" style="min-height: 400px; padding: 1rem;">
                     <div class="row">
                         <div class="col-2" style="margin-bottom: 0.5rem;">
+                            <label for="name">Nome:</label>
+                        </div>
+                        <div class="col-10" style="margin-bottom: 0.5rem;">
+                            <input type="text" name="name" id="name" maxlength="100" style="width: 100%;">
+                        </div>
+                        <div class="col-2" style="margin-bottom: 0.5rem;">
+                            <label for="birthdate">Idade:</label>
+                        </div>
+                        <div class="col-10" style="margin-bottom: 0.5rem;">
+                            <input type="date" name="birthdate" id="birthdate" style="width: 100%;">
+                        </div>
+                        <div class="col-2" style="margin-bottom: 0.5rem;">
+                            <label for="email">E-mail:</label>
+                        </div>
+                        <div class="col-10" style="margin-bottom: 0.5rem;">
+                            <input type="email" name="email" id="email" style="width: 100%;">
+                        </div>
+                        <div class="col-2" style="margin-bottom: 0.5rem;">
                             <label for="login">Login:</label>
                         </div>
                         <div class="col-10" style="margin-bottom: 0.5rem;">
@@ -83,15 +101,8 @@
                         <div class="col-10" style="margin-bottom: 0.5rem;">
                             <input type="password" name="password" id="password" maxlength="20" style="width: 100%;">
                         </div>
-                        <div class="col-6 d-flex justify-content-center" style="margin-bottom: 0.5rem;">
-                            <input type="submit" value="Entrar" onclick="TemplateOnSubmit()">
-                        </div>
-                        <div class="col-6 d-flex justify-content-center" style="margin-bottom: 0.5rem;">
-                            <input type="button" value="Limpar">
-                        </div>
-                        <div class="col-12 d-flex justify-content-center">
-                            <label for="">Não se cadastrou ainda? </label>
-                            <input type="button" value="Cadastre-se aqui" onclick="Registration()">
+                        <div class="col-12 d-flex justify-content-center" style="margin-bottom: 0.5rem;">
+                            <input type="button" onclick="TemplateOnSubmit()" value="Cadastrar">
                         </div>
                     </div>
                 </main>
@@ -106,40 +117,52 @@
     <script>
         function TemplateOnSubmit()
         {
+            let name = $("#name").val();
+            let birthdate = $("#birthdate").val();
+            let email = $("#email").val();
             let login = $("#login").val();
             let password = $("#password").val();
 
-            if($("#login").val() === '')
+            if(name === '')
+            {
+                $("#name").focus();
+                return;
+            }
+            if(birthdate === '')
+            {
+                $("#birthdate").focus();
+                return;
+            }
+            if(email === '')
+            {
+                $("#email").focus();
+                return;
+            }
+            if(login === '')
             {
                 $("#login").focus();
                 return;
             }
-            if($("#password").val() === '')
+            if(password === '')
             {
                 $("#password").focus();
                 return;
             }
-            
-            $.post("Login.php", {login: login, password: password},
-                function(data){
-                    if(data.login != null)
-                    {
-                        localStorage.setItem('login', data.login);
-                        localStorage.setItem('type', data.type);
-                        
-                        alert("Usuário Logado");
 
-                        location.replace('index.html');
-                    }
-                    else{
-                        alert("Usuário não encontrado");
-                    }
+            alert(password);
+            
+            $.post("registration.php", 
+            {   
+                name: name, 
+                birthdate: birthdate,
+                email: email,
+                login: login, 
+                password: password
+            },
+                function(data){
+                    alert(data.ok);
                 }, "json"
             );
-        }
-        function Registration()
-        {
-            location.replace('registration.html');
         }
     </script>
 </html>

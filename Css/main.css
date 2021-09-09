@@ -32,9 +32,6 @@ h1, h1 a{
     text-decoration: none;
     display: inline-block;
     position: relative;
-    left: 40%;
-    top: 7px;
-    z-index: 2;
 }
 h1 a:hover{
     color: white;
@@ -57,7 +54,6 @@ h1 a:hover{
     height: 400px;
     margin-right: 20px;
     position: relative;
-    bottom: 40px;
 }
 #navEstilo{
     background-color: rgb(40, 40, 44);
