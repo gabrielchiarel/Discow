@@ -12,8 +12,19 @@
     </head>
     <body>
         <header>
-            <h1><a href="index.html">discow</a></h1>
-            <img src="disco.jpg" alt="discoHeader">
+            <div class="row" style="padding-top: 1rem;">
+                <div class="col-3 d-flex justify-content-center">
+                    <h1><a href="index.html">discow</a></h1>
+                </div>
+                <div class="col-6 d-flex justify-content-center">
+                    <input type="text" style="width: 70%;"><input type="button" value="procurar">
+                </div>
+                <div class="col-3 d-flex justify-content-center">
+                    <div style="border: 1px solid white; width: 70%;">
+                        
+                    </div>
+                </div>
+            </div>
         </header>
         <nav class="navbar navbar-expand" id="navHorizontal">
             <div class="col 6">
@@ -39,61 +50,98 @@
                 </div>
             </div>
             <div class="col 6">
-                <a class="nav-link" href="carrinho.html">Meu Carrinho<img src="shopping-cart.png" alt="shopping-cart"></a>
+                <a class="nav-link" href="carrinho.html">Meu Carrinho<img src="Local/shopping-cart.png" alt="shopping-cart"></a>
             </div>
         </nav>
-        <nav id="navVertical">
-            <div id="navEstilo">
-                <h4>Gêneros</h4>
+        <div class="row">
+            <div class="col-3" style="margin-bottom: 2rem;">
+                <nav id="navVertical">
+                    <div id="navEstilo">
+                        <h4>Gêneros</h4>
+                    </div>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Rock</a>
+                            <a class="nav-link" href="#">Indie Rock</a>
+                            <a class="nav-link" href="#">Hip Hop</a>
+                            <a class="nav-link" href="#">Indie Pop</a>
+                        </li>
+                    </ul>
+                </nav>
             </div>
-            <ul class="nav flex-column">
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Rock</a>
-                    <a class="nav-link" href="#">Indie Rock</a>
-                    <a class="nav-link" href="#">Hip Hop</a>
-                    <a class="nav-link" href="#">Indie Pop</a>
-                </li>
-            </ul>
-        </nav>
-        <main id="inicio">
-            <div class="row" id="grid">
-                <div class="col 4 ml-3">
-                    <div class="card">
-                        <a href="travis.html"><img class="card-img-top" src="travisScott.jpg" alt="álbum"></a>
-                        <div class="card-body text-center">
-                            <div class="card-title">ASTROWORLD</div>
-                            <p class="card-text">Travis Scott<br>R$ 120,00 <a class="btn btn-outline-secondary btn-sm" href="#"><img src="shopping-cart.png" alt="shopping-cart"></a></p>
-                            <a href="https://open.spotify.com/album/41GuZcammIkupMPKH2OJ6I?si=7708d7acdd43486b" target="_blank" class="btn btn-light"><img src="spotify.png" alt="spotifyLogo"></a>
-                            <a href="https://www.metacritic.com/music/astroworld/travis-scott" target="_blank" class="btn btn-light"><img src="metacritic.png" alt="metacriticLogo"></a>
+            <div class="col-9" style="margin-bottom: 2rem;">
+                <main id="inicio" style="min-height: 400px; padding: 1rem;">
+                    <div class="row">
+                        <div class="class-4">
+                            <div class="card">
+                                <a href="am.html"><img class="card-img-top" src="am.jpg" alt="álbum"></a>
+                                <div class="card-body text-center">
+                                <div class="card-title">AM</div>
+                                    <p class="card-text">Arctic Monkeys<br>R$ 120,00 <a class="btn btn-outline-secondary btn-sm" href="#"><img src="shopping-cart.png" alt="shopping-cart"></a></p>
+                                    <a href="https://open.spotify.com/album/78bpIziExqiI9qztvNFlQu?si=UVUP9yIjQW-E0n5hQs5IfA" target="_blank" class="btn btn-light"><img src="spotify.png" alt="spotifyLogo"></a>
+                                    <a href="https://www.metacritic.com/music/am/arctic-monkeys" target="_blank" class="btn btn-light"><img src="metacritic.png" alt="metacriticLogo"></a>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col 4 ml-3">
-                    <div class="card">
-                        <a href="tame.html"><img class="card-img-top" src="currentsTame.jpg" alt="álbum"></a>
-                        <div class="card-body text-center">
-                            <div class="card-title">CURRENTS</div>
-                            <p class="card-text">Tame Impala<br>R$ 120,00 <a class="btn btn-outline-secondary btn-sm" href="#"><img src="shopping-cart.png" alt="shopping-cart"></a></p>
-                            <a href="https://open.spotify.com/album/79dL7FLiJFOO0EoehUHQBv?si=xDqxGgnvSGazJfDG5dfoWA" target="_blank" class="btn btn-light"><img src="spotify.png" alt="spotifyLogo"></a>
-                            <a href="https://www.metacritic.com/music/currents/tame-impala" target="_blank" class="btn btn-light"><img src="metacritic.png" alt="metacriticLogo"></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col 4 ml-3">
-                    <div class="card">
-                        <a href="am.html"><img class="card-img-top" src="am.jpg" alt="álbum"></a>
-                        <div class="card-body text-center">
-                        <div class="card-title">AM</div>
-                            <p class="card-text">Arctic Monkeys<br>R$ 120,00 <a class="btn btn-outline-secondary btn-sm" href="#"><img src="shopping-cart.png" alt="shopping-cart"></a></p>
-                            <a href="https://open.spotify.com/album/78bpIziExqiI9qztvNFlQu?si=UVUP9yIjQW-E0n5hQs5IfA" target="_blank" class="btn btn-light"><img src="spotify.png" alt="spotifyLogo"></a>
-                            <a href="https://www.metacritic.com/music/am/arctic-monkeys" target="_blank" class="btn btn-light"><img src="metacritic.png" alt="metacriticLogo"></a>
-                        </div>
-                    </div>
-                </div>
+                </main>
             </div>
-        </main>
-        <footer id="footerInicio">
-            <p>Made by: Gabriel Chiarel</p>
-        </footer>
+            <div class="col-12">
+                <footer id="footerInicio">
+                    <p>Made by: Gabriel Chiarel</p>
+                </footer>
+            </div>
+        </div>
     </body>
+    <script>
+        function TemplateOnSubmit()
+        {
+            let login = $("#login").val();
+            let password = $("#password").val();
+
+            if($("#login").val() === '')
+            {
+                $("#login").focus();
+                return;
+            }
+            if($("#password").val() === '')
+            {
+                $("#password").focus();
+                return;
+            }
+            
+            $.post("Login.php", {login: login, password: password},
+                function(data){
+                    if(data.login != null)
+                    {
+                        localStorage.setItem('login', data.login);
+                        localStorage.setItem('type', data.type);
+                        
+                        alert("Usuário Logado");
+
+                        location.replace('index.html');
+                    }
+                    else{
+                        alert("Usuário não encontrado");
+                    }
+                }, "json"
+            );
+        }
+        function Registration()
+        {
+            location.replace('registration.html');
+        }
+    </script>
 </html>
+
+<!--<div class="col 4 ml-3">
+    <div class="card">
+        <a href="am.html"><img class="card-img-top" src="am.jpg" alt="álbum"></a>
+        <div class="card-body text-center">
+        <div class="card-title">AM</div>
+            <p class="card-text">Arctic Monkeys<br>R$ 120,00 <a class="btn btn-outline-secondary btn-sm" href="#"><img src="shopping-cart.png" alt="shopping-cart"></a></p>
+            <a href="https://open.spotify.com/album/78bpIziExqiI9qztvNFlQu?si=UVUP9yIjQW-E0n5hQs5IfA" target="_blank" class="btn btn-light"><img src="spotify.png" alt="spotifyLogo"></a>
+            <a href="https://www.metacritic.com/music/am/arctic-monkeys" target="_blank" class="btn btn-light"><img src="metacritic.png" alt="metacriticLogo"></a>
+        </div>
+    </div>
+</div>-->
