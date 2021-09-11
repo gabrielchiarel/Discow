@@ -71,7 +71,7 @@
                 </nav>
             </div>
             <div class="col-9" style="margin-bottom: 2rem;">
-                <main id="inicio" style="min-height: 400px; padding: 1rem;">
+                <main id="inicio" style="min-height: 400px; padding: 0.5rem;">
                     <div class="row" style="width: 100%;">
                         <?php
                             if(empty($_GET['search']))
@@ -106,7 +106,7 @@
                         
                             while($row = $query->fetch(PDO::FETCH_ASSOC))
                             {
-                                echo '<div class="col-4">
+                                echo '<div class="col-3">
                                             <div class="card">
                                                 <a href="#"><img class="card-img-top" src="..." alt="álbum"></a>
                                                 <div class="card-body text-center">

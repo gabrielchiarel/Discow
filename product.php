@@ -1,7 +1,3 @@
-<?php
-    session_start();
-    @$_SESSION['shop'] = array();
-?>
 <!DOCTYPE html>
 <html lang="pt-br">
     <head>
@@ -77,43 +73,48 @@
             <div class="col-9" style="margin-bottom: 2rem;">
                 <main id="inicio" style="min-height: 400px; padding: 0.5rem;">
                     <div class="row" style="width: 100%;">
-                        <div class="col-12 d-flex justify-content-center">
-                            <h2>Destaques</h2>
-                        </div>
                         <?php
-                            $con = new PDO('mysql:host=localhost;dbname=discow', 'root', '');
+                        if(empty($_GET['id']))
+                        {
+                            $id = 0;
+                        }
+                        else
+                        {
+                            $id = $_GET['id'];
+                        }
 
-                            $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                            
-                            $con->beginTransaction();
-                            $query = $con->prepare(
-                                "SELECT pro.Id as Id,
-                                pro.Name as Name, 
-                                pro.Gender as Gender, 
-                                pro.CategoryId as CategoryId, 
-                                pro.ArtistId as ArtistId, 
-                                pro.Top as Top, 
-                                pro.Price as Price,
-                                pro.Price `Type`, 
-                                art.Name as ArtistName,
-                                cat.Name as CategoryName FROM product as pro
-                                INNER JOIN category as cat ON cat.Id = pro.CategoryId
-                                INNER JOIN artist as art ON art.Id = pro.ArtistId
-                                WHERE pro.Top = 1");
-                            $query->execute([]);
+                        $con = new PDO('mysql:host=localhost;dbname=discow', 'root', '');
+
+                        $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                         
-                            while($row = $query->fetch(PDO::FETCH_ASSOC))
-                            {
-                                echo '<div class="col-3">
-                                            <div class="card">
-                                                <a href="#"><img class="card-img-top" src="Local/am.jpg" alt="álbum"></a>
-                                                <div class="card-body text-center">
-                                                    <div class="card-title">'. $row['Name'] .'</div>
-                                                    <p class="card-text">'. $row['ArtistName'] . '<br>R$'. $row['Price'] .'<br>Produto:'. $row['CategoryName'] .'<br><a class="btn btn-outline-secondary btn-sm" href="#"><img src="Local/shopping-cart.png" alt="shopping-cart"></a></p>
-                                                </div>
+                        $con->beginTransaction();
+                        $query = $con->prepare(
+                            "SELECT pro.Id as Id,
+                            pro.Name as Name, 
+                            pro.Gender as Gender, 
+                            pro.CategoryId as CategoryId, 
+                            pro.ArtistId as ArtistId, 
+                            pro.Top as Top, 
+                            pro.Price as Price,
+                            pro.Price `Type`, 
+                            art.Name as ArtistName,
+                            cat.Name as CategoryName FROM product as pro
+                            INNER JOIN category as cat ON cat.Id = pro.CategoryId
+                            INNER JOIN artist as art ON art.Id = pro.ArtistId
+                            WHERE pro.Id = $id");
+                        $query->execute([]);
+                        while($row = $query->fetch(PDO::FETCH_ASSOC))
+                        {
+                            echo '<div class="col-3">
+                                        <div class="card">
+                                            <a href="#"><img class="card-img-top" src="..." alt="álbum"></a>
+                                            <div class="card-body text-center">
+                                                <div class="card-title">'. $row['Name'] .'</div>
+                                                <p class="card-text">'. $row['ArtistName'] . '<br>R$'. $row['Price'] .'<br>Produto:'. $row['CategoryName'] .'<br><a class="btn btn-outline-secondary btn-sm" href="#"><img src="Local/shopping-cart.png" alt="shopping-cart"></a></p>
                                             </div>
-                                        </div>';
-                            }
+                                        </div>
+                                    </div>';
+                        }
                         ?>
                     </div>
                 </main>
@@ -131,15 +132,3 @@
         }
     </script>
 </html>
-
-<!--<div class="col 4 ml-3">
-    <div class="card">
-        <a href="am.html"><img class="card-img-top" src="am.jpg" alt="álbum"></a>
-        <div class="card-body text-center">
-        <div class="card-title">AM</div>
-            <p class="card-text">Arctic Monkeys<br>R$ 120,00 <a class="btn btn-outline-secondary btn-sm" href="#"><img src="shopping-cart.png" alt="shopping-cart"></a></p>
-            <a href="https://open.spotify.com/album/78bpIziExqiI9qztvNFlQu?si=UVUP9yIjQW-E0n5hQs5IfA" target="_blank" class="btn btn-light"><img src="spotify.png" alt="spotifyLogo"></a>
-            <a href="https://www.metacritic.com/music/am/arctic-monkeys" target="_blank" class="btn btn-light"><img src="metacritic.png" alt="metacriticLogo"></a>
-        </div>
-    </div>
-</div>-->
