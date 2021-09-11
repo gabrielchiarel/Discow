@@ -106,7 +106,7 @@
                         
                             while($row = $query->fetch(PDO::FETCH_ASSOC))
                             {
-                                echo '<div class="col-3">
+                                echo '<div class="col-12 col-sm-6 col-md-6 col-lg-3 col-xl-3 d-flex justify-content-center">
                                             <div class="card">
                                                 <a href="#"><img class="card-img-top" src="..." alt="álbum"></a>
                                                 <div class="card-body text-center">
