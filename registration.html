@@ -14,10 +14,10 @@
         <header>
             <div class="row" style="padding-top: 1rem;">
                 <div class="col-3 d-flex justify-content-center">
-                    <h1><a href="index.html">discow</a></h1>
+                    <h1><a href="index.php">discow</a></h1>
                 </div>
                 <div class="col-6 d-flex justify-content-center">
-                    <input type="text" style="width: 70%;"><input type="button" value="procurar">
+                    <input type="text" id='search' name="search" style="width: 70%;"><input type="button" onclick="SearchOnClick()" value="procurar">
                 </div>
                 <div class="col-3 d-flex justify-content-center">
                     <div style="border: 1px solid white; width: 70%;">
@@ -164,6 +164,9 @@
                     alert(data.ok);
                 }, "json"
             );
+        }
+        function SearchOnClick(){
+            location.href = `search.php?search=${$("#search").val()}`;
         }
     </script>
 </html>

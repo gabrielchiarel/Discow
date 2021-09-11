@@ -4,6 +4,7 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
         <link rel="stylesheet" href="Css/main.css">
         <link rel="stylesheet" href="Css/breakpoints.css">
@@ -14,14 +15,14 @@
         <header>
             <div class="row" style="padding-top: 1rem;">
                 <div class="col-3 d-flex justify-content-center">
-                    <h1><a href="index.html">discow</a></h1>
+                    <h1><a href="index.php">discow</a></h1>
                 </div>
                 <div class="col-6 d-flex justify-content-center">
-                    <input type="text" style="width: 70%;"><input type="button" value="procurar">
+                    <input type="text" id='search' name="search" style="width: 70%;"><input type="button" onclick="SearchOnClick()" value="procurar">
                 </div>
                 <div class="col-3 d-flex justify-content-center">
                     <div style="border: 1px solid white; width: 70%;">
-                        
+                        <a href="login.html">Logue-se</a>
                     </div>
                 </div>
             </div>
@@ -71,18 +72,51 @@
             </div>
             <div class="col-9" style="margin-bottom: 2rem;">
                 <main id="inicio" style="min-height: 400px; padding: 1rem;">
-                    <div class="row">
-                        <div class="class-4">
-                            <div class="card">
-                                <a href="am.html"><img class="card-img-top" src="am.jpg" alt="álbum"></a>
-                                <div class="card-body text-center">
-                                <div class="card-title">AM</div>
-                                    <p class="card-text">Arctic Monkeys<br>R$ 120,00 <a class="btn btn-outline-secondary btn-sm" href="#"><img src="shopping-cart.png" alt="shopping-cart"></a></p>
-                                    <a href="https://open.spotify.com/album/78bpIziExqiI9qztvNFlQu?si=UVUP9yIjQW-E0n5hQs5IfA" target="_blank" class="btn btn-light"><img src="spotify.png" alt="spotifyLogo"></a>
-                                    <a href="https://www.metacritic.com/music/am/arctic-monkeys" target="_blank" class="btn btn-light"><img src="metacritic.png" alt="metacriticLogo"></a>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="row" style="width: 100%;">
+                        <?php
+                            if(empty($_GET['search']))
+                            {
+                                $search = '';
+                            }
+                            else
+                            {
+                                $search = $_GET['search'];
+                            }
+
+                            $con = new PDO('mysql:host=localhost;dbname=discow', 'root', '');
+
+                            $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                            
+                            $con->beginTransaction();
+                            $query = $con->prepare(
+                                'SELECT pro.Id as Id,
+                                pro.Name as Name, 
+                                pro.Gender as Gender, 
+                                pro.CategoryId as CategoryId, 
+                                pro.ArtistId as ArtistId, 
+                                pro.Top as Top, 
+                                pro.Price as Price,
+                                pro.Price `Type`, 
+                                art.Name as ArtistName,
+                                cat.Name as CategoryName FROM product as pro
+                                INNER JOIN category as cat ON cat.Id = pro.CategoryId
+                                INNER JOIN artist as art ON art.Id = pro.ArtistId
+                                WHERE pro.Name LIKE "%'. $search .'%" OR art.Name LIKE "'. $search .'%" OR cat.Name LIKE "%'. $search .'%"');
+                            $query->execute([]);
+                        
+                            while($row = $query->fetch(PDO::FETCH_ASSOC))
+                            {
+                                echo '<div class="col-4">
+                                            <div class="card">
+                                                <a href="#"><img class="card-img-top" src="..." alt="álbum"></a>
+                                                <div class="card-body text-center">
+                                                    <div class="card-title">'. $row['Name'] .'</div>
+                                                    <p class="card-text">'. $row['ArtistName'] . '<br>R$'. $row['Price'] .'<br>Produto:'. $row['CategoryName'] .'<br><a class="btn btn-outline-secondary btn-sm" href="#"><img src="Local/shopping-cart.png" alt="shopping-cart"></a></p>
+                                                </div>
+                                            </div>
+                                        </div>';
+                            }
+                        ?>
                     </div>
                 </main>
             </div>
@@ -94,54 +128,8 @@
         </div>
     </body>
     <script>
-        function TemplateOnSubmit()
-        {
-            let login = $("#login").val();
-            let password = $("#password").val();
-
-            if($("#login").val() === '')
-            {
-                $("#login").focus();
-                return;
-            }
-            if($("#password").val() === '')
-            {
-                $("#password").focus();
-                return;
-            }
-            
-            $.post("Login.php", {login: login, password: password},
-                function(data){
-                    if(data.login != null)
-                    {
-                        localStorage.setItem('login', data.login);
-                        localStorage.setItem('type', data.type);
-                        
-                        alert("Usuário Logado");
-
-                        location.replace('index.html');
-                    }
-                    else{
-                        alert("Usuário não encontrado");
-                    }
-                }, "json"
-            );
-        }
-        function Registration()
-        {
-            location.replace('registration.html');
+        function SearchOnClick(){
+            location.href = `search.php?search=${$("#search").val()}`;
         }
     </script>
 </html>
-
-<!--<div class="col 4 ml-3">
-    <div class="card">
-        <a href="am.html"><img class="card-img-top" src="am.jpg" alt="álbum"></a>
-        <div class="card-body text-center">
-        <div class="card-title">AM</div>
-            <p class="card-text">Arctic Monkeys<br>R$ 120,00 <a class="btn btn-outline-secondary btn-sm" href="#"><img src="shopping-cart.png" alt="shopping-cart"></a></p>
-            <a href="https://open.spotify.com/album/78bpIziExqiI9qztvNFlQu?si=UVUP9yIjQW-E0n5hQs5IfA" target="_blank" class="btn btn-light"><img src="spotify.png" alt="spotifyLogo"></a>
-            <a href="https://www.metacritic.com/music/am/arctic-monkeys" target="_blank" class="btn btn-light"><img src="metacritic.png" alt="metacriticLogo"></a>
-        </div>
-    </div>
-</div>-->

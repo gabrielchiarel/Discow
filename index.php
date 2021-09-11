@@ -1,3 +1,8 @@
+<?php
+    session_start();
+    @$_SESSION['shop'] = array();
+?>
+<!DOCTYPE html>
 <html lang="pt-br">
     <head>
         <meta charset="UTF-8">
@@ -8,7 +13,7 @@
         <link rel="stylesheet" href="Css/main.css">
         <link rel="stylesheet" href="Css/breakpoints.css">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
-        <title>Login</title>
+        <title>discow - Vendas de discos é aqui!</title>
     </head>
     <body>
         <header>
@@ -17,11 +22,11 @@
                     <h1><a href="index.php">discow</a></h1>
                 </div>
                 <div class="col-6 d-flex justify-content-center">
-                    <input type="text" id='search' name="search" style="width: 70%;"><input type="button" onclick="SearchOnClick()" value="procurar">
+                <input type="text" id='search' name="search" style="width: 70%;"><input type="button" onclick="SearchOnClick()" value="procurar">
                 </div>
                 <div class="col-3 d-flex justify-content-center">
                     <div style="border: 1px solid white; width: 70%;">
-                        
+                        <a href="login.html">Logue-se</a>
                     </div>
                 </div>
             </div>
@@ -71,29 +76,42 @@
             </div>
             <div class="col-9" style="margin-bottom: 2rem;">
                 <main id="inicio" style="min-height: 400px; padding: 1rem;">
-                    <div class="row">
-                        <div class="col-2" style="margin-bottom: 0.5rem;">
-                            <label for="login">Login:</label>
-                        </div>
-                        <div class="col-10" style="margin-bottom: 0.5rem;">
-                            <input type="text" name="login" id="login" maxlength="20" style="width: 100%;">
-                        </div>
-                        <div class="col-2" style="margin-bottom: 0.5rem;">
-                            <label for="password">Senha:</label>
-                        </div>
-                        <div class="col-10" style="margin-bottom: 0.5rem;">
-                            <input type="password" name="password" id="password" maxlength="20" style="width: 100%;">
-                        </div>
-                        <div class="col-6 d-flex justify-content-center" style="margin-bottom: 0.5rem;">
-                            <input type="submit" value="Entrar" onclick="TemplateOnSubmit()">
-                        </div>
-                        <div class="col-6 d-flex justify-content-center" style="margin-bottom: 0.5rem;">
-                            <input type="button" value="Limpar">
-                        </div>
-                        <div class="col-12 d-flex justify-content-center">
-                            <label for="">Não se cadastrou ainda? </label>
-                            <input type="button" value="Cadastre-se aqui" onclick="Registration()">
-                        </div>
+                    <div class="row" style="width: 100%;">
+                        <?php
+                            $con = new PDO('mysql:host=localhost;dbname=discow', 'root', '');
+
+                            $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                            
+                            $con->beginTransaction();
+                            $query = $con->prepare(
+                                "SELECT pro.Id as Id,
+                                pro.Name as Name, 
+                                pro.Gender as Gender, 
+                                pro.CategoryId as CategoryId, 
+                                pro.ArtistId as ArtistId, 
+                                pro.Top as Top, 
+                                pro.Price as Price,
+                                pro.Price `Type`, 
+                                art.Name as ArtistName,
+                                cat.Name as CategoryName FROM product as pro
+                                INNER JOIN category as cat ON cat.Id = pro.CategoryId
+                                INNER JOIN artist as art ON art.Id = pro.ArtistId
+                                WHERE pro.Top = 1");
+                            $query->execute([]);
+                        
+                            while($row = $query->fetch(PDO::FETCH_ASSOC))
+                            {
+                                echo '<div class="col-4">
+                                            <div class="card">
+                                                <a href="#"><img class="card-img-top" src="..." alt="álbum"></a>
+                                                <div class="card-body text-center">
+                                                    <div class="card-title">'. $row['Name'] .'</div>
+                                                    <p class="card-text">'. $row['ArtistName'] . '<br>R$'. $row['Price'] .'<br>Produto:'. $row['CategoryName'] .'<br><a class="btn btn-outline-secondary btn-sm" href="#"><img src="Local/shopping-cart.png" alt="shopping-cart"></a></p>
+                                                </div>
+                                            </div>
+                                        </div>';
+                            }
+                        ?>
                     </div>
                 </main>
             </div>
@@ -105,45 +123,20 @@
         </div>
     </body>
     <script>
-        function TemplateOnSubmit()
-        {
-            let login = $("#login").val();
-            let password = $("#password").val();
-
-            if($("#login").val() === '')
-            {
-                $("#login").focus();
-                return;
-            }
-            if($("#password").val() === '')
-            {
-                $("#password").focus();
-                return;
-            }
-            
-            $.post("Login.php", {login: login, password: password},
-                function(data){
-                    if(data.login != null)
-                    {
-                        localStorage.setItem('login', data.login);
-                        localStorage.setItem('type', data.type);
-                        
-                        alert("Usuário Logado");
-
-                        location.replace('index.html');
-                    }
-                    else{
-                        alert("Usuário não encontrado");
-                    }
-                }, "json"
-            );
-        }
-        function Registration()
-        {
-            location.replace('registration.html');
-        }
         function SearchOnClick(){
             location.href = `search.php?search=${$("#search").val()}`;
         }
     </script>
 </html>
+
+<!--<div class="col 4 ml-3">
+    <div class="card">
+        <a href="am.html"><img class="card-img-top" src="am.jpg" alt="álbum"></a>
+        <div class="card-body text-center">
+        <div class="card-title">AM</div>
+            <p class="card-text">Arctic Monkeys<br>R$ 120,00 <a class="btn btn-outline-secondary btn-sm" href="#"><img src="shopping-cart.png" alt="shopping-cart"></a></p>
+            <a href="https://open.spotify.com/album/78bpIziExqiI9qztvNFlQu?si=UVUP9yIjQW-E0n5hQs5IfA" target="_blank" class="btn btn-light"><img src="spotify.png" alt="spotifyLogo"></a>
+            <a href="https://www.metacritic.com/music/am/arctic-monkeys" target="_blank" class="btn btn-light"><img src="metacritic.png" alt="metacriticLogo"></a>
+        </div>
+    </div>
+</div>-->
