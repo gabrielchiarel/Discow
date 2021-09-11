@@ -106,7 +106,7 @@
                             {
                                 echo '<div class="col-12 col-sm-6 col-md-6 col-lg-3 col-xl-3 d-flex justify-content-center">
                                             <div class="card">
-                                                <a href="#"><img class="card-img-top" src="Local/am.jpg" alt="álbum"></a>
+                                                <a href="product.php?id='. $row['Id'] .'"><img class="card-img-top" src="Local/am.jpg" alt="álbum"></a>
                                                 <div class="card-body text-center">
                                                     <div class="card-title">'. $row['Name'] .'</div>
                                                     <p class="card-text">'. $row['ArtistName'] . '<br>R$'. $row['Price'] .'<br>Produto:'. $row['CategoryName'] .'<br><a class="btn btn-outline-secondary btn-sm" href="#"><img src="Local/shopping-cart.png" alt="shopping-cart"></a></p>

@@ -105,6 +105,9 @@
                         $query->execute([]);
                         while($row = $query->fetch(PDO::FETCH_ASSOC))
                         {
+                            echo '<div class="col-12 d-flex justify-content-center">
+                                    <h3>'. strtoupper($row['Name']) .', '. strtoupper($row['ArtistName']) .'</h3>
+                                </div>';
                             echo '<div class="col-3">
                                         <div class="card">
                                             <a href="#"><img class="card-img-top" src="..." alt="álbum"></a>
