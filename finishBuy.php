@@ -1,6 +1,8 @@
 <?php
     $id = $_REQUEST['id'];
 
+    $id = 1;
+
     $amount = $_REQUEST['amount'];
 
     if (!empty($id)) 

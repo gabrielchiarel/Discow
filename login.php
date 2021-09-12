@@ -141,7 +141,7 @@
             
             $.post("loginVerify.php", {login: login, password: password},
                 function(data){
-                    if(data.login != null)
+                    if(data.login != 'null')
                     {   
                         alert("Usuário Logado");
 

@@ -80,7 +80,7 @@
                             <h2>Seu Carrinho</h2>
                         </div>
                         <?php
-                            if(empty($_SESSION['shop']) && $_SESSION['shop'] != (object)[]))
+                            if(empty($_SESSION['shop']) && $_SESSION['shop'] != (object)[])
                             {
                                 @$_SESSION['shop'] = array();
                             }
@@ -217,6 +217,7 @@
                 $.post("finishBuy.php",
                     {id: id, amount},
                     function(data){
+                        alert('oi');
                         if(data.ok == true)
                         {
                             alert(data.message);
@@ -225,20 +226,16 @@
                     }, "json"
                 );
             }
+            else
+            {
+                alert('Faça o login para finalizar a compra');
+                window.location.replace('login.php');
+            }
         }
 
         function DeleteAllShop()
         {
-            $.post("deleteAllShop.php",
-                    {id: id, amount},
-                    function(data){
-                        if(data.ok == true)
-                        {
-                            alert(data.message);
-                            DeleteAllShop();
-                        }
-                    }, "json"
-                ); 
+            $.post("deleteAllShop.php"); 
         }
     </script>
 </html>
