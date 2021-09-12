@@ -1,3 +1,6 @@
+<?php
+    session_start();
+?>
 <!DOCTYPE html>
 <html lang="pt-br">
     <head>
@@ -21,8 +24,23 @@
                     <input type="text" id='search' name="search" style="width: 70%;"><input type="button" onclick="SearchOnClick()" value="procurar">
                 </div>
                 <div class="col-3 d-flex justify-content-center">
-                    <div style="border: 1px solid white; width: 70%;">
-                        <a href="login.html">Logue-se</a>
+                    <div class="row" style="border: 1px solid white; width: 90%;color:white">
+                        <?php
+                            if(!empty($_SESSION['user']) && $_SESSION['user'] != (object)[])
+                            {
+                                echo '<div class="col-6 justify-content-center">
+                                        <span>Usuário Logado:<br> '. $_SESSION['user']['Login'] .'</span>
+                                    </div>
+                                    <div class="col-6 justify-content-center">
+                                        <a class="btn btn-light" onclick="Logout()">Sair</a>
+                                    </div>';
+                            }
+                            else{
+                                echo '<div class="col-6 justify-content-center">
+                                        <a class="btn btn-light" href="login.php">Logue-se</a>
+                                    </div>';
+                            }
+                        ?>
                     </div>
                 </div>
             </div>
@@ -51,7 +69,7 @@
                 </div>
             </div>
             <div class="col 6">
-                <a class="nav-link" href="carrinho.html">Meu Carrinho<img src="Local/shopping-cart.png" alt="shopping-cart"></a>
+                <a class="nav-link" href="shoppingCart.php">Meu Carrinho<img src="Local/shopping-cart.png" alt="shopping-cart"></a>
             </div>
         </nav>
         <div class="row">
@@ -74,13 +92,13 @@
                 <main id="inicio" style="min-height: 400px; padding: 0.5rem;">
                     <div class="row" style="width: 100%;">
                         <?php
-                            if(empty($_GET['search']))
+                            if(empty(filter_var($_GET['search'], FILTER_SANITIZE_STRING)))
                             {
                                 $search = '';
                             }
                             else
                             {
-                                $search = $_GET['search'];
+                                $search = filter_var($_GET['search'], FILTER_SANITIZE_STRING);
                             }
 
                             $con = new PDO('mysql:host=localhost;dbname=discow', 'root', '');
@@ -98,9 +116,11 @@
                                 pro.Price as Price,
                                 pro.Price `Type`, 
                                 art.Name as ArtistName,
-                                cat.Name as CategoryName FROM product as pro
+                                cat.Name as CategoryName, 
+                                pho.Name as PhotoName FROM product as pro
                                 INNER JOIN category as cat ON cat.Id = pro.CategoryId
                                 INNER JOIN artist as art ON art.Id = pro.ArtistId
+                                INNER JOIN photo as pho ON pro.Id = pho.ProductId
                                 WHERE pro.Name LIKE "%'. $search .'%" OR art.Name LIKE "'. $search .'%" OR cat.Name LIKE "%'. $search .'%"');
                             $query->execute([]);
                         
@@ -108,7 +128,7 @@
                             {
                                 echo '<div class="col-12 col-sm-6 col-md-6 col-lg-3 col-xl-3 d-flex justify-content-center">
                                             <div class="card">
-                                                <a href="product.php?id='. $row['Id'] .'"><img class="card-img-top" src="..." alt="álbum"></a>
+                                                <a href="product.php?id='. $row['Id'] .'"><img class="card-img-top" src="Local/'. $row['PhotoName'] .'" alt="álbum"></a>
                                                 <div class="card-body text-center">
                                                     <div class="card-title">'. $row['Name'] .'</div>
                                                     <p class="card-text">'. $row['ArtistName'] . '<br>R$'. $row['Price'] .'<br>Produto:'. $row['CategoryName'] .'<br><a class="btn btn-outline-secondary btn-sm" href="#"><img src="Local/shopping-cart.png" alt="shopping-cart"></a></p>
@@ -130,6 +150,14 @@
     <script>
         function SearchOnClick(){
             location.href = `search.php?search=${$("#search").val()}`;
+        }
+
+        function Logout(){
+            $.post("logout.php",
+                function(data){
+                    location.reload();
+                }, "json"
+            );
         }
     </script>
 </html>

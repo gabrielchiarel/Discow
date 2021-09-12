@@ -72,29 +72,33 @@
                 <a class="nav-link" href="shoppingCart.php">Meu Carrinho<img src="Local/shopping-cart.png" alt="shopping-cart"></a>
             </div>
         </nav>
-        <div class="row">
-            <div class="col-3" style="margin-bottom: 2rem;">
-                <nav id="navVertical">
-                    <div id="navEstilo">
-                        <h4>Gêneros</h4>
-                    </div>
-                    <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Rock</a>
-                            <a class="nav-link" href="#">Indie Rock</a>
-                            <a class="nav-link" href="#">Hip Hop</a>
-                            <a class="nav-link" href="#">Indie Pop</a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
-            <div class="col-9" style="margin-bottom: 2rem;">
+        <div class="row" style="margin-left: 0.5rem">
+            <div class="col-12" style="margin-bottom: 2rem;">
                 <main id="inicio" style="min-height: 400px; padding: 0.5rem;">
-                    <div class="row" style="width: 100%;">
+                    <div class="row" style="width: 100%;min-height:370px;">
                         <div class="col-12 d-flex justify-content-center">
-                            <h2>Destaques</h2>
+                            <h2>Seu Carrinho</h2>
                         </div>
                         <?php
+                            if(empty($_SESSION['shop']) && $_SESSION['shop'] != (object)[]))
+                            {
+                                @$_SESSION['shop'] = array();
+                            }
+                            
+                            $productIds = array();
+                            
+                            if(count($_SESSION['shop']) > 0)
+                            {
+                                for($i = 0; $i < count($_SESSION['shop']); $i++)
+                                {
+                                    array_push($productIds, $_SESSION['shop'][$i][0]);
+                                }
+                            }
+                            else
+                            {
+                                array_push($productIds, 0);
+                            }
+
                             $con = new PDO('mysql:host=localhost;dbname=discow', 'root', '');
 
                             $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -115,50 +119,85 @@
                                 INNER JOIN category as cat ON cat.Id = pro.CategoryId
                                 INNER JOIN artist as art ON art.Id = pro.ArtistId
                                 INNER JOIN photo as pho ON pro.Id = pho.ProductId
-                                WHERE pro.Top = 1");
+                                WHERE pro.Id IN (" . implode(",", $productIds) . ")");
                             $query->execute([]);
-                                
-                            $products = array();
+                             
+                            $total = 0;
 
                             while($row = $query->fetch(PDO::FETCH_ASSOC))
                             {
-                                array_push($products, $row);
+                                $amount = 0;
                                 
-                                echo '<div class="col-12 col-sm-6 col-md-6 col-lg-3 col-xl-3 d-flex justify-content-center">
-                                            <div class="card">
-                                                <a href="product.php?id='. $row['Id'] .'"><img class="card-img-top" src="Local/'. $row['PhotoName'] .'" alt="álbum"></a>
-                                                <div class="card-body text-center">
-                                                    <div class="card-title">'. $row['Name'] .'</div>
-                                                    <p class="card-text">'. $row['ArtistName'] . '<br>R$'. $row['Price'] .'<br>Produto:'. $row['CategoryName'] .'<br>
-                                                    <a class="btn btn-outline-secondary btn-sm" onclick="AddProduct('. $row['Id'] .',1)"><img src="Local/shopping-cart.png" alt="shopping-cart"></a>
+                                for($i = 0; $i < count($_SESSION['shop']); $i++)
+                                {
+                                    if($row['Id'] == $_SESSION['shop'][$i][0])
+                                    {
+                                        $amount = $_SESSION['shop'][$i][1];
+                                    }
+                                }
+                                
+                                $total = $total + ($row['Price'] * $amount);
+
+                                echo '<div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 d-flex justify-content-center" style="margin-bottom:0.5rem;">
+                                            <div class="row" style="width:100%;border: 0.5px solid rgb(94, 93, 104);border-radius: 4px;background-color: rgb(40, 40, 44);height: 102px;">
+                                                <div class="col-4 d-flex justify-content-center" style="height:100px;">
+                                                    <img src="Local/'. $row['PhotoName'] .'" alt="álbum" style="width:40%;height:100%;">
+                                                </div>
+                                                <div class="col-4 d-flex justify-content-start align-items-center">
+                                                    <p>
+                                                        ' . strtoupper($row['Name']) .', '. strtoupper($row['ArtistName']) .'<br>
+                                                        Preço: '. $row['Price'] .'<br>
+                                                        Produto:' . $row['CategoryName'] .'
                                                     </p>
+                                                </div>
+                                                <div class="col-3 d-flex justify-content-end align-items-center">
+                                                    <a class="btn btn-light" onclick="ControlAmount('. $row['Id'] .','. $amount .', 0)" style="margin-right: 0.5rem;">-</a>
+                                                    ' . $amount .'
+                                                    <a class="btn btn-light" onclick="ControlAmount('. $row['Id'] .','. $amount .', 1)" style="margin-left: 0.5rem;">+</a>
+                                                    <div>
+                                                        <button type="button" class="btn btn-danger" onclick="Delete('. $row['Id'] .')" style="margin-left: 0.5rem;">Excluir</button> 
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>';
                             }
                         ?>
                     </div>
+                    <div class="row">
+                        <?php
+                            echo '<div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 d-flex justify-content-end" style="padding-right:10%;margin-bottom:0.5rem">
+                                    <span style="color: white;">Total: R$ '. $total .'</span>
+                                </div>'
+                        ?>
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 d-flex justify-content-end align-items-end" id="botoes">
+                                <a class="btn btn-light" 
+                                onclick="FinishBuy(<?php if(!empty($_SESSION['user']) && $_SESSION['user'] != (object)[]){ echo $_SESSION['user']['Id']. ',' . $amount; }else{ echo 0 . ',' . $amount; } ?>)" 
+                                style="margin-right: 0.5rem;">Finalizar Compra</a>
+                                <a href="index.php" class="btn btn-light">Voltar</a>
+                        </div>
+                    </div>
                 </main>
             </div>
-            <div class="col-12">
-                <footer id="footerInicio">
-                    <p>Made by: Gabriel Chiarel</p>
-                </footer>
-            </div>
         </div>
+        <footer>
+            <p>Made by: Gabriel Chiarel</p>
+        </footer>
     </body>
     <script>
-        function SearchOnClick(){
-            location.href = `search.php?search=${$("#search").val()}`;
+        function ControlAmount(id, amount, operator)
+        {
+            $.post("controlAmount.php", {id: id, amount: amount, operator: operator},
+                function(data){
+                    location.reload();
+                }, "json"
+            );
         }
 
-        function AddProduct(id, amount){
-            $.post("sessionShop.php", {id: id, amount: amount},
+        function Delete(id)
+        {
+            $.post("delete.php", {id: id},
                 function(data){
-                    if(data.ok)
-                    {
-                        alert('Produto adicionado ao Carrinho!');
-                    }
+                    location.reload();
                 }, "json"
             );
         }
@@ -169,6 +208,37 @@
                     location.reload();
                 }, "json"
             );
+        }
+
+        function FinishBuy(id, amount)
+        {
+            if(id != 0)
+            {
+                $.post("finishBuy.php",
+                    {id: id, amount},
+                    function(data){
+                        if(data.ok == true)
+                        {
+                            alert(data.message);
+                            DeleteAllShop();
+                        }
+                    }, "json"
+                );
+            }
+        }
+
+        function DeleteAllShop()
+        {
+            $.post("deleteAllShop.php",
+                    {id: id, amount},
+                    function(data){
+                        if(data.ok == true)
+                        {
+                            alert(data.message);
+                            DeleteAllShop();
+                        }
+                    }, "json"
+                ); 
         }
     </script>
 </html>

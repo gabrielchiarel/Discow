@@ -1,3 +1,6 @@
+<?php
+    session_start();
+?>
 <!DOCTYPE html>
 <html lang="pt-br">
     <head>
@@ -21,8 +24,23 @@
                 <input type="text" id='search' name="search" style="width: 70%;"><input type="button" onclick="SearchOnClick()" value="procurar">
                 </div>
                 <div class="col-3 d-flex justify-content-center">
-                    <div style="border: 1px solid white; width: 70%;">
-                        <a href="login.html">Logue-se</a>
+                    <div class="row" style="border: 1px solid white; width: 90%;color:white">
+                        <?php
+                            if(!empty($_SESSION['user']) && $_SESSION['user'] != (object)[])
+                            {
+                                echo '<div class="col-6 justify-content-center">
+                                        <span>Usuário Logado:<br> '. $_SESSION['user']['Login'] .'</span>
+                                    </div>
+                                    <div class="col-6 justify-content-center">
+                                        <a class="btn btn-light" onclick="Logout()">Sair</a>
+                                    </div>';
+                            }
+                            else{
+                                echo '<div class="col-6 justify-content-center">
+                                        <a class="btn btn-light" href="login.php">Logue-se</a>
+                                    </div>';
+                            }
+                        ?>
                     </div>
                 </div>
             </div>
@@ -51,7 +69,7 @@
                 </div>
             </div>
             <div class="col 6">
-                <a class="nav-link" href="carrinho.html">Meu Carrinho<img src="Local/shopping-cart.png" alt="shopping-cart"></a>
+                <a class="nav-link" href="shoppingCart.php">Meu Carrinho<img src="Local/shopping-cart.png" alt="shopping-cart"></a>
             </div>
         </nav>
         <div class="row">
@@ -74,13 +92,13 @@
                 <main id="inicio" style="min-height: 400px; padding: 0.5rem;">
                     <div class="row" style="width: 100%;">
                         <?php
-                        if(empty($_GET['id']))
+                        if(empty(filter_var($_GET['id'], FILTER_SANITIZE_STRING)))
                         {
                             $id = 0;
                         }
                         else
                         {
-                            $id = $_GET['id'];
+                            $id = filter_var($_GET['id'], FILTER_SANITIZE_STRING);
                         }
 
                         $con = new PDO('mysql:host=localhost;dbname=discow', 'root', '');
@@ -98,9 +116,11 @@
                             pro.Price as Price,
                             pro.Price `Type`, 
                             art.Name as ArtistName,
-                            cat.Name as CategoryName FROM product as pro
+                            cat.Name as CategoryName, 
+                            pho.Name as PhotoName FROM product as pro
                             INNER JOIN category as cat ON cat.Id = pro.CategoryId
                             INNER JOIN artist as art ON art.Id = pro.ArtistId
+                            INNER JOIN photo as pho ON pro.Id = pho.ProductId
                             WHERE pro.Id = $id");
                         $query->execute([]);
                         while($row = $query->fetch(PDO::FETCH_ASSOC))
@@ -108,12 +128,16 @@
                             echo '<div class="col-12 d-flex justify-content-center">
                                     <h3>'. strtoupper($row['Name']) .', '. strtoupper($row['ArtistName']) .'</h3>
                                 </div>';
-                            echo '<div class="col-3">
-                                        <div class="card">
-                                            <a href="#"><img class="card-img-top" src="..." alt="álbum"></a>
+                            echo '<div class="col-8 col-sm-8 col-md-8 col-lg-8 col-xl-8 d-flex justify-content-center" style="padding:0.5rem;height:250px;">
+                                            <img class="card-img-top" src="Local/'. $row['PhotoName'] .'" alt="álbum" style="width:60%;height:100%;">
+                                    </div>
+                                    <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 d-flex justify-content-center" style="padding:0.5rem;height:100px;">
+                                        <div class="card" style="height: 10rem !important;">
                                             <div class="card-body text-center">
                                                 <div class="card-title">'. $row['Name'] .'</div>
-                                                <p class="card-text">'. $row['ArtistName'] . '<br>R$'. $row['Price'] .'<br>Produto:'. $row['CategoryName'] .'<br><a class="btn btn-outline-secondary btn-sm" href="#"><img src="Local/shopping-cart.png" alt="shopping-cart"></a></p>
+                                                <p class="card-text">R$'. $row['Price'] .'<br>Produto:'. $row['CategoryName'] .'<br>
+                                                    <a class="btn btn-outline-secondary btn-sm" onclick="AddProduct('. $row['Id'] .',1)"><img src="Local/shopping-cart.png" alt="shopping-cart"></a>
+                                                </p>
                                             </div>
                                         </div>
                                     </div>';
@@ -132,6 +156,22 @@
     <script>
         function SearchOnClick(){
             location.href = `search.php?search=${$("#search").val()}`;
+        }
+
+        function AddProduct(id, amount){
+            $.post("sessionShop.php", {id: id, amount: amount},
+                function(data){
+                    alert('Produto adicionado ao Carrinho!');
+                }, "json"
+            );
+        }
+        
+        function Logout(){
+            $.post("logout.php",
+                function(data){
+                    location.reload();
+                }, "json"
+            );
         }
     </script>
 </html>
