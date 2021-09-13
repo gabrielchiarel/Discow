@@ -1,7 +1,6 @@
 <?php
     session_start();
 ?>
-<!DOCTYPE html>
 <html lang="pt-br">
     <head>
         <meta charset="UTF-8">
@@ -12,7 +11,7 @@
         <link rel="stylesheet" href="Css/main.css">
         <link rel="stylesheet" href="Css/breakpoints.css">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
-        <title>discow - Vendas de discos é aqui!</title>
+        <title>Login</title>
     </head>
     <body>
         <header>
@@ -21,7 +20,7 @@
                     <h1><a href="index.php">discow</a></h1>
                 </div>
                 <div class="col-6 d-flex justify-content-center">
-                <input type="text" id='search' name="search" style="width: 70%;"><input type="button" onclick="SearchOnClick()" value="procurar">
+                    <input type="text" id='search' name="search" style="width: 70%;"><input type="button" onclick="SearchOnClick()" value="procurar">
                 </div>
                 <div class="col-3 d-flex justify-content-center">
                     <div class="row" style="border: 1px solid white; width: 90%;color:white">
@@ -46,7 +45,7 @@
             </div>
         </header>
         <nav class="navbar navbar-expand" id="navHorizontal">
-            <div class="col-6">
+            <div class="col 6">
                 <div class="container-fluid">
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDarkDropdown" aria-controls="navbarNavDarkDropdown" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -68,7 +67,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-6">
+            <div class="col 6">
                 <a class="nav-link" href="shoppingCart.php">Meu Carrinho<img src="Local/shopping-cart.png" alt="shopping-cart"></a>
             </div>
         </nav>
@@ -89,54 +88,29 @@
                 </nav>
             </div>
             <div class="col-9" style="margin-bottom: 2rem;">
-                <main id="inicio" style="min-height: 400px; padding: 0.5rem;">
-                    <div class="row" style="width: 100%;">
-                        <div class="col-12 d-flex justify-content-center">
-                            <h2>Destaques</h2>
+                <main id="inicio" style="min-height: 400px; padding: 1rem;">
+                    <div class="row">
+                        <div class="col-2" style="margin-bottom: 0.5rem;">
+                            <label for="name">Nome:</label>
                         </div>
-                        <?php
-                            $con = new PDO('mysql:host=localhost;dbname=discow', 'root', '');
-
-                            $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                            
-                            $con->beginTransaction();
-                            $query = $con->prepare(
-                                "SELECT pro.Id as Id,
-                                pro.Name as Name, 
-                                pro.Gender as Gender, 
-                                pro.CategoryId as CategoryId, 
-                                pro.ArtistId as ArtistId, 
-                                pro.Top as Top, 
-                                pro.Price as Price,
-                                pro.Price `Type`, 
-                                art.Name as ArtistName,
-                                cat.Name as CategoryName,
-                                pho.Name as PhotoName FROM product as pro
-                                INNER JOIN category as cat ON cat.Id = pro.CategoryId
-                                INNER JOIN artist as art ON art.Id = pro.ArtistId
-                                INNER JOIN photo as pho ON pro.Id = pho.ProductId
-                                WHERE pro.Top = 1");
-                            $query->execute([]);
-                                
-                            $products = array();
-
-                            while($row = $query->fetch(PDO::FETCH_ASSOC))
-                            {
-                                array_push($products, $row);
-                                
-                                echo '<div class="col-12 col-sm-6 col-md-6 col-lg-3 col-xl-3 d-flex justify-content-center">
-                                            <div class="card">
-                                                <a href="product.php?id='. $row['Id'] .'"><img class="card-img-top" src="Local/'. $row['PhotoName'] .'" alt="álbum"></a>
-                                                <div class="card-body text-center">
-                                                    <div class="card-title">'. $row['Name'] .'</div>
-                                                    <p class="card-text">'. $row['ArtistName'] . '<br>R$'. $row['Price'] .'<br>Produto:'. $row['CategoryName'] .'<br>
-                                                    <a class="btn btn-outline-secondary btn-sm" onclick="AddProduct('. $row['Id'] .',1)"><img src="Local/shopping-cart.png" alt="shopping-cart"></a>
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>';
-                            }
-                        ?>
+                        <div class="col-10" style="margin-bottom: 0.5rem;">
+                            <input type="text" name="name" id="name" maxlength="100" style="width: 100%;">
+                        </div>
+                        <div class="col-2" style="margin-bottom: 0.5rem;">
+                            <label for="email">E-mail:</label>
+                        </div>
+                        <div class="col-10" style="margin-bottom: 0.5rem;">
+                            <input type="email" name="email" id="email" style="width: 100%;">
+                        </div>
+                        <div class="col-2" style="margin-bottom: 0.5rem;">
+                            <label for="topic">Assunto:</label>
+                        </div>
+                        <div class="col-10" style="margin-bottom: 0.5rem;">
+                            <textarea name="topic" id="topic" style="width: 100%; min-height:100px;max-height:100px"></textarea>
+                        </div>
+                        <div class="col-12 d-flex justify-content-center" style="margin-bottom: 0.5rem;">
+                            <input type="button" onclick="TemplateOnSubmit()" value="Enviar">
+                        </div>
                     </div>
                 </main>
             </div>
@@ -155,19 +129,43 @@
         </div>
     </body>
     <script>
-        function SearchOnClick(){
-            location.href = `search.php?search=${$("#search").val()}`;
-        }
+        function TemplateOnSubmit()
+        {
+            let name = $("#name").val();
+            let email = $("#email").val();
+            var rgxEmail = email.match(/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}/i);
+            let topic = $("#topic").val();
 
-        function AddProduct(id, amount){
-            $.post("sessionShop.php", {id: id, amount: amount},
+            if(name === '')
+            {
+                $("#name").focus();
+                return;
+            }
+            if(email === '' || rgxEmail === null)
+            {
+                $("#email").focus();
+                return;
+            }
+            if(topic === '')
+            {
+                $("#topic").focus();
+                return; 
+            }
+            
+            $.post("finishSend.php", 
+                {   
+                    name: name, 
+                    email: email,
+                    topic: topic, 
+                },
                 function(data){
-                    if(data.ok)
-                    {
-                        alert('Produto adicionado ao Carrinho!');
-                    }
+                    alert(data.message);
                 }, "json"
             );
+        }
+        
+        function SearchOnClick(){
+            location.href = `search.php?search=${$("#search").val()}`;
         }
 
         function Logout(){

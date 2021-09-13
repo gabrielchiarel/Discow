@@ -171,7 +171,7 @@
                         ?>
                         <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 d-flex justify-content-end align-items-end" id="botoes">
                                 <a class="btn btn-light" 
-                                onclick="FinishBuy(<?php if(!empty($_SESSION['user']) && $_SESSION['user'] != (object)[]){ echo $_SESSION['user']['Id']. ',' . $amount; }else{ echo 0 . ',' . $amount; } ?>)" 
+                                onclick="FinishBuy(<?php if(!empty($_SESSION['user']) && $_SESSION['user'] != (object)[]){ echo $_SESSION['user']['Id']. ',' . $total; }else{ echo 0 . ',' . $total; } ?>)" 
                                 style="margin-right: 0.5rem;">Finalizar Compra</a>
                                 <a href="index.php" class="btn btn-light">Voltar</a>
                         </div>
@@ -210,19 +210,16 @@
             );
         }
 
-        function FinishBuy(id, amount)
+        function FinishBuy(id, total)
         {
+            alert(total)
             if(id != 0)
             {
                 $.post("finishBuy.php",
-                    {id: id, amount},
+                    {id: id, total: total},
                     function(data){
-                        alert('oi');
-                        if(data.ok == true)
-                        {
-                            alert(data.message);
-                            DeleteAllShop();
-                        }
+                        alert(data.message);
+                        DeleteAllShop();
                     }, "json"
                 );
             }
@@ -233,9 +230,14 @@
             }
         }
 
+        function SearchOnClick(){
+            location.href = `search.php?search=${$("#search").val()}`;
+        }
+
         function DeleteAllShop()
         {
-            $.post("deleteAllShop.php"); 
+            $.post("deleteAllShop.php");
+            location.reload();
         }
     </script>
 </html>

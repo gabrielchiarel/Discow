@@ -121,7 +121,7 @@
                                 INNER JOIN category as cat ON cat.Id = pro.CategoryId
                                 INNER JOIN artist as art ON art.Id = pro.ArtistId
                                 INNER JOIN photo as pho ON pro.Id = pho.ProductId
-                                WHERE pro.Name LIKE "%'. $search .'%" OR art.Name LIKE "'. $search .'%" OR cat.Name LIKE "%'. $search .'%"');
+                                WHERE pro.Name LIKE "%'. $search .'%" OR art.Name LIKE "%'. $search .'%" OR cat.Name LIKE "%'. $search .'%"');
                             $query->execute([]);
                         
                             while($row = $query->fetch(PDO::FETCH_ASSOC))
@@ -142,7 +142,14 @@
             </div>
             <div class="col-12">
                 <footer id="footerInicio">
-                    <p>Made by: Gabriel Chiarel</p>
+                    <div class="row">
+                        <div class="col-6 d-flex justify-content-start">
+                            <a class="btn btn-outline-secondary btn-sm" href="sendEmail.php">Fale conosco</a><br>
+                        </div>
+                        <div class="col-6 d-flex justify-content-end">
+                            <span>Made by: Gabriel Chiarel</span>
+                        </div>
+                    </div>
                 </footer>
             </div>
         </div>

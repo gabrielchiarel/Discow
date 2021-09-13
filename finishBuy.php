@@ -1,9 +1,7 @@
 <?php
     $id = $_REQUEST['id'];
 
-    $id = 1;
-
-    $amount = $_REQUEST['amount'];
+    $total = $_REQUEST['total'];
 
     if (!empty($id)) 
     {
@@ -25,14 +23,14 @@
         
         if($row = $query->fetch(PDO::FETCH_ASSOC))
         {
-            if (mail($row['Email'], 'Recibo','Total da compra foi'. $amount, 'From: discow <gabchiarel@hotmail.com>')) 
+            /*if (mail($row['Email'], 'Recibo','Total da compra foi'. $total, 'From: discow <gabchiarel@hotmail.com>')) 
             {
-                echo json_encode(array("message"=>'Email Enviado', "ok"=>true));
+                echo json_encode(array("message"=>'Email Enviado', "ok"=>"true"));
             }
             else 
-            {
-                echo json_encode(array("message"=>'Email não enviado mas compra realizada com sucesso.', "ok"=>true));
-            }
+            {*/
+                echo json_encode(array("message"=>'Email não enviado mas compra realizada com sucesso.', "ok"=>"true"));
+            //}
         }
      }
 ?>

@@ -148,7 +148,14 @@
             </div>
             <div class="col-12">
                 <footer id="footerInicio">
-                    <p>Made by: Gabriel Chiarel</p>
+                    <div class="row">
+                        <div class="col-6 d-flex justify-content-start">
+                            <a class="btn btn-outline-secondary btn-sm" href="sendEmail.php">Fale conosco</a><br>
+                        </div>
+                        <div class="col-6 d-flex justify-content-end">
+                            <span>Made by: Gabriel Chiarel</span>
+                        </div>
+                    </div>
                 </footer>
             </div>
         </div>

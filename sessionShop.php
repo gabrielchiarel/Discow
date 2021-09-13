@@ -1,7 +1,7 @@
 <?php
     session_start();
     
-    if(empty($_SESSION['shop']) && $_SESSION['shop'] != (object)[]))
+    if(empty($_SESSION['shop']) && $_SESSION['shop'] != (object)[])
     {
         @$_SESSION['shop'] = array();
     }

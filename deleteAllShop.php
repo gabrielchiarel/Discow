@@ -3,5 +3,5 @@
     
     $_SESSION['shop'] = array();
 
-    echo json_encode(["ok"=>true]);
+    echo json_encode(["ok"=>"true"]);
 ?>
