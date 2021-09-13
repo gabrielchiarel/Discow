@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 11-Set-2021 às 23:32
+-- Tempo de geração: 13-Set-2021 às 02:49
 -- Versão do servidor: 10.4.17-MariaDB
 -- versão do PHP: 8.0.0
 
@@ -79,7 +79,31 @@ CREATE TABLE `person` (
 
 INSERT INTO `person` (`Id`, `Name`, `Email`, `Birthdate`) VALUES
 (1, 'administrador', 'gabchiarel@hotmail.com', '1997-09-04'),
-(41, 'teste', 'teste@teste.com', '2021-09-01');
+(41, 'teste', 'teste@teste.com', '2021-09-01'),
+(42, 'kiarel', 'gabrielchiarel@hotmail.com', '1997-09-04');
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `photo`
+--
+
+CREATE TABLE `photo` (
+  `Id` int(11) NOT NULL,
+  `Name` text NOT NULL,
+  `ProductId` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Extraindo dados da tabela `photo`
+--
+
+INSERT INTO `photo` (`Id`, `Name`, `ProductId`) VALUES
+(1, '1_1.jpg', 1),
+(2, '2_2.jpg', 2),
+(3, '3_3.jpg', 3),
+(4, '4_4.jpg', 4),
+(5, '5_5.jpg', 5);
 
 -- --------------------------------------------------------
 
@@ -128,7 +152,8 @@ CREATE TABLE `user` (
 
 INSERT INTO `user` (`Id`, `Login`, `Password`, `Type`, `PersonId`) VALUES
 (1, 'admin', 'admin', 1, 1),
-(45, 'teste', 'teste', 0, 41);
+(45, 'teste', 'teste', 0, 41),
+(46, 'kiarel', 'agenor', 0, 42);
 
 --
 -- Índices para tabelas despejadas
@@ -152,6 +177,13 @@ ALTER TABLE `category`
 ALTER TABLE `person`
   ADD PRIMARY KEY (`Id`),
   ADD UNIQUE KEY `Email` (`Email`);
+
+--
+-- Índices para tabela `photo`
+--
+ALTER TABLE `photo`
+  ADD PRIMARY KEY (`Id`),
+  ADD KEY `FK_Photo_Product_Id` (`ProductId`);
 
 --
 -- Índices para tabela `product`
@@ -189,7 +221,13 @@ ALTER TABLE `category`
 -- AUTO_INCREMENT de tabela `person`
 --
 ALTER TABLE `person`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+
+--
+-- AUTO_INCREMENT de tabela `photo`
+--
+ALTER TABLE `photo`
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de tabela `product`
@@ -201,11 +239,17 @@ ALTER TABLE `product`
 -- AUTO_INCREMENT de tabela `user`
 --
 ALTER TABLE `user`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
 
 --
 -- Restrições para despejos de tabelas
 --
+
+--
+-- Limitadores para a tabela `photo`
+--
+ALTER TABLE `photo`
+  ADD CONSTRAINT `FK_Photo_Product_Id` FOREIGN KEY (`ProductId`) REFERENCES `product` (`Id`);
 
 --
 -- Limitadores para a tabela `product`

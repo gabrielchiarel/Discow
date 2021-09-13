@@ -185,7 +185,8 @@
                     password: password
                 },
                 function(data){
-                    alert(data.ok);
+                    alert("Registrado com sucesso");
+                    location.replace("login.php");
                 }, "json"
             );
         }
